@@ -1,0 +1,85 @@
+[
+  {
+    "id": 1,
+    "name": "The Complete JavaScript course",
+    "duration": 27,
+    "level": "beginner",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 340,
+    "price": 59,
+    "summary": "Master JavaScript by creating simple games",
+    "description": "In this fun course you will learn JavaScript by creating fun and simple games. We will be coding PacMan, Minesweeper, Candy Crush and Super Mario Bros. Be ready for fun!",
+    "instuctor": "Jeremy Hans",
+    "imageCover": "",
+    "courseContent": [
+      "Introduction",
+      "Types",
+      "Objects and Functions",
+      "Arrays",
+      "Object-Oriented Programmng",
+      "Creating games",
+      "Summary"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Modern CSS, learn Flexbox, Grid and SCSS",
+    "duration": 15,
+    "level": "intermediate",
+    "ratingsAverage": 4.7,
+    "ratingsQuantity": 1237,
+    "price": 39,
+    "summary": "Learn how to style your websites with Flexbox and Grid",
+    "description": "In this fun course you will learn modern CSS by creating two beautiful websites.",
+    "instuctor": "Tamara Krol",
+    "imageCover": "",
+    "courseContent": [
+      "Introduction",
+      "SCSS",
+      "Inntroduction to flexbox",
+      "First project",
+      "Introduciton to grid",
+      "Second project",
+      "Summary"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Advanced JavaScript course",
+    "duration": 20,
+    "level": "intermediate",
+    "ratingsAverage": 4.6,
+    "ratingsQuantity": 456,
+    "price": 49,
+    "summary": "Level up your JavaScript knowledge",
+    "description": "In this advanced JavaScript course you will learn scope, closures, prototypes, 'this', and more.",
+    "instuctor": "Sarah Smith",
+    "imageCover": "",
+    "courseContent": [
+      "Introduction",
+      "Execution Contexts and Lexical Environments",
+      "Object-Oriented Programmng",
+      "Building Objects",
+      "Final project",
+      "Summary"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Course",
+    "duration": 7,
+    "level": "beginner",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 340,
+    "price": 59
+  },
+  {
+    "id": 5,
+    "name": "Hard Course",
+    "duration": 7,
+    "level": "advanced",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 340,
+    "price": 59
+  }
+]

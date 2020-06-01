@@ -81,5 +81,14 @@
     "ratingsAverage": 4.8,
     "ratingsQuantity": 340,
     "price": 59
+  },
+  {
+    "id": 6,
+    "name": "Amazing course",
+    "duration": 7,
+    "level": "advanced",
+    "ratingsAverage": 4.8,
+    "ratingsQuantity": 340,
+    "price": 20
   }
 ]

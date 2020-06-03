@@ -1,7 +1,5 @@
 const express = require('express')
 const {
-  checkID,
-  checkBody,
   getAllCourses,
   createCourse,
   getCourse,
@@ -11,9 +9,7 @@ const {
 
 const router = express.Router()
 
-router.param('id', checkID)
-
-router.route('/').get(getAllCourses).post(checkBody, createCourse)
+router.route('/').get(getAllCourses).post(createCourse)
 
 router.route('/:id').get(getCourse).patch(updateCourse).delete(deleteCourse)
 

@@ -1,83 +1,93 @@
-const fs = require('fs')
+const Course = require('./../models/courseModel')
 
-const courses = JSON.parse(
-  fs.readFileSync(`${__dirname}/../resources/data/courses.json`)
-)
+exports.getAllCourses = async (req, res) => {
+  try {
+    const courses = await Course.find()
 
-exports.checkID = (req, res, next, val) => {
-  if (req.params.id * 1 > courses.length) {
-    return res.status(404).json({
+    res.status(200).json({
+      status: 'success',
+      results: courses.length,
+      data: {
+        courses,
+      },
+    })
+  } catch (err) {
+    res.status(404).json({
       status: 'fail',
-      message: 'Invalid ID',
+      message: err,
     })
   }
-  next()
 }
 
-exports.checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    return res.status(400).json({
+exports.getCourse = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id)
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        course,
+      },
+    })
+  } catch (err) {
+    res.status(404).json({
       status: 'fail',
-      message: 'Please provide course name and price',
+      message: err,
     })
   }
-  next()
 }
 
-exports.getAllCourses = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    results: courses.length,
-    data: {
-      courses,
-    },
-  })
+exports.createCourse = async (req, res) => {
+  try {
+    const newCourse = await Course.create(req.body)
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        course: newCourse,
+      },
+    })
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Invalid data sent!',
+    })
+  }
 }
 
-exports.getCourse = (req, res) => {
-  const id = req.params.id * 1
-  const course = courses.find((el) => el.id === id)
+exports.updateCourse = async (req, res) => {
+  try {
+    const course = await Course.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    })
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      course,
-    },
-  })
+    res.status(200).json({
+      status: 'success',
+      data: {
+        course,
+      },
+    })
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Invalid data sent!',
+    })
+  }
 }
 
-exports.createCourse = (req, res) => {
-  const newId = courses.length + 1
-  const newCourse = Object.assign({ id: newId }, req.body)
+exports.deleteCourse = async (req, res) => {
+  try {
+    await Course.findByIdAndDelete(req.params.id)
 
-  courses.push(newCourse)
-
-  fs.writeFile(
-    `${__dirname}/../resources/data/courses.json`,
-    JSON.stringify(courses),
-    (err) => {
-      res.status(201).json({
-        status: 'success',
-        data: {
-          course: newCourse,
-        },
-      })
-    }
-  )
-}
-
-exports.updateCourse = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    data: {
-      course: 'Updated course',
-    },
-  })
-}
-
-exports.deleteCourse = (req, res) => {
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  })
+    res.status(200).json({
+      status: 'success',
+      data: null,
+    })
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Invalid data sent!',
+    })
+  }
 }

@@ -2,12 +2,43 @@ const Course = require('./../models/courseModel')
 
 exports.getAllCourses = async (req, res) => {
   try {
-    // build query
+    // build query & filtering
     const queryObj = { ...req.query }
     const excludedFields = ['page', 'sort', 'limit', 'fields']
     excludedFields.forEach((el) => delete queryObj[el])
 
-    const query = await Course.find(queryObj)
+    let queryStr = JSON.stringify(queryObj)
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
+
+    let query = Course.find(JSON.parse(queryStr))
+
+    // sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ')
+      query = query.sort(sortBy)
+    } else {
+      query = query.sort('-createdAt')
+    }
+
+    // field limiting
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ')
+      query = query.select(fields)
+    } else {
+      //exlude __v
+      query = query.select('-__v')
+    }
+
+    // pagination
+    const page = req.query.page * 1 || 1
+    const limit = req.query.limit * 1 || 100
+    const skip = (page - 1) * limit
+    query = query.skip(skip).limit(limit)
+
+    if (req.query.page) {
+      numCourses = await Course.countDocuments()
+      if (skip >= numCourses) throw new Error('This page does not exist')
+    }
 
     // execute query
     const courses = await query

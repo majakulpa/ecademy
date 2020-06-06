@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const slugify = require('slugify')
 
 // schema
 const courseSchema = new mongoose.Schema({
@@ -7,6 +8,7 @@ const courseSchema = new mongoose.Schema({
     required: [true, 'A course must have a name'],
     unique: true,
   },
+  slug: String,
   duration: {
     type: Number,
     required: [true, 'A course must have a duration'],
@@ -44,12 +46,37 @@ const courseSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
-    select: false,
+  },
+  lastUpdated: {
+    type: Date,
+    default: Date.now(),
   },
   courseContent: [String],
+  secretCourse: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-// model
+// document middleware: runs before save() and create()
+courseSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true })
+  next()
+})
+
+// query middleware
+courseSchema.pre(/^find/, function (next) {
+  this.find({ secretCourse: { $ne: true } })
+  this.start = Date.now()
+  next()
+})
+
+courseSchema.post(/^find/, function (docs, next) {
+  console.log(`Query took ${Date.now() - this.start} ms `)
+  //console.log(docs)
+  next()
+})
+
 const Course = mongoose.model('Course', courseSchema)
 
 module.exports = Course

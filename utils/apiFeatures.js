@@ -29,7 +29,7 @@ class APIFeatures {
 
   limitFields() {
     if (this.queryString.fields) {
-      const fields = req.query.fields.split(',').join(' ')
+      const fields = this.queryString.fields.split(',').join(' ')
       this.query = this.query.select(fields)
     } else {
       //exlude __v

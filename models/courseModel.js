@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const slugify = require('slugify')
+const validator = require('validator')
 
 // schema
 const courseSchema = new mongoose.Schema({
@@ -7,6 +8,15 @@ const courseSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A course must have a name'],
     unique: true,
+    maxlength: [40, 'Name must have less or equal than 40 characters'],
+    minlength: [6, 'Name must have more or equal than 2 characters'],
+  },
+  instructor: {
+    type: String,
+    required: [true, 'A course must have instructor'],
+    maxlength: [40, 'Instructor must have less or equal than 40 characters'],
+    minlength: [2, 'Instructor must have more or equal than 2 characters'],
+    validate: [validator.isAlpha, 'Instructor name can only constain letters'],
   },
   slug: String,
   duration: {
@@ -16,6 +26,8 @@ const courseSchema = new mongoose.Schema({
   ratingsAverage: {
     type: Number,
     default: 4.5,
+    min: [1, 'Minimun rating is 1'],
+    max: [5, 'Maximum rating is 5'],
   },
   ratingsQuantity: {
     type: Number,
@@ -24,12 +36,24 @@ const courseSchema = new mongoose.Schema({
   level: {
     type: String,
     required: [true, 'Please select level'],
+    enum: {
+      values: ['beginner', 'intermediate', 'advanced'],
+      message: 'Level is either: beginner, intermediate or advanced',
+    },
   },
   price: {
     type: Number,
     required: [true, 'A course must have a price'],
   },
-  priceDiscount: Number,
+  priceDiscount: {
+    type: Number,
+    validate: {
+      validator: function (val) {
+        return val < this.price
+      },
+      message: "Discount can't be greater than price",
+    },
+  },
   summary: {
     type: String,
     trim: true,
@@ -73,7 +97,12 @@ courseSchema.pre(/^find/, function (next) {
 
 courseSchema.post(/^find/, function (docs, next) {
   console.log(`Query took ${Date.now() - this.start} ms `)
-  //console.log(docs)
+  next()
+})
+
+// aggregation middleware
+courseSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { secretCourse: { $ne: true } } })
   next()
 })
 

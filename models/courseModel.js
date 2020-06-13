@@ -16,7 +16,7 @@ const courseSchema = new mongoose.Schema({
     required: [true, 'A course must have instructor'],
     maxlength: [40, 'Instructor must have less or equal than 40 characters'],
     minlength: [2, 'Instructor must have more or equal than 2 characters'],
-    validate: [validator.isAlpha, 'Instructor name can only constain letters'],
+    validate: [validator.isAlpha, 'Instructor name can only contain letters'],
   },
   slug: String,
   duration: {
